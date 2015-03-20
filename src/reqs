@@ -1,0 +1,7 @@
+hash of strings that are keys that we will add
+set of reducers, 1-1 for each key that we are adding
+
+N mappers
+
+a set of input (files?)
+a set of keys (cmd line? input 'keys.txt' file?)
