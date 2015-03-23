@@ -44,41 +44,97 @@ func findAndSplitWork(dirname string, keyMap map[string]chan int) {
 
 func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool) {
 	// create a 'routine local' mapping of the keys we're interested in looking for
-	keys := make(map[string]int)
+	localKeyMapChannel := make(chan int)
+	stringToPositionMapping := make(map[string]int)
+	mappedTotals := make([]int, len(keyToReducerMap))
+
+	i := 0
+	for key, _ := range keyToReducerMap {
+		stringToPositionMapping[key] = i
+		i++
+	}
 
 	// create a
 	reader := bufio.NewReader(input)
 	r, _ := regexp.Compile("[!-@]*")
-	for {
-		line, err := reader.ReadString('\n')
-		parsedWords := strings.TrimSpace(line)
-		parsedWords = r.ReplaceAllString(parsedWords, "")
-		parsedWordsArray := strings.Split(parsedWords, " ")
+	submapperFinished := make(chan bool)
+	allParsed := make(chan bool)
+	subMapperCount := 0
+	go func() {
+		for {
+			line, err := reader.ReadString('\n')
+			parsedWords := strings.TrimSpace(line)
+			parsedWords = r.ReplaceAllString(parsedWords, "")
+			// parsedWordsArray := strings.Split(parsedWords, " ")
 
-		for _, word := range parsedWordsArray {
-			// word = strings.TrimSpace(word)
-			if word == "" {
-				continue
-			}
+			// for _, word := range parsedWordsArray {
+			// 	// word = strings.TrimSpace(word)
+			// 	if word == "" {
+			// 		continue
+			// 	}
 
-			if _, exists := keyToReducerMap[word]; exists {
-				keys[word]++
+			// 	if _, exists := keyToReducerMap[word]; exists {
+			// 		keys[word]++
+			// 	}
+			// }
+
+			if err == io.EOF {
+				go subMapper(parsedWords, stringToPositionMapping, localKeyMapChannel, submapperFinished)
+				subMapperCount++
+				break
+			} else {
+				go subMapper(parsedWords, stringToPositionMapping, localKeyMapChannel, submapperFinished)
+				subMapperCount++
 			}
 		}
+		allParsed <- true
+	}()
 
-		if err == io.EOF {
-			break
-		} else {
-
+	go func() {
+		for mapped := range localKeyMapChannel {
+			// fmt.Println("Mapped", mapped)
+			mappedTotals[mapped]++
 		}
-	}
+	}()
 
-	for key, value := range keys {
-		keyToReducerMap[key] <- value
+	<-allParsed
+	go func() {
+		for subMapperCount != 0 {
+			<-submapperFinished
+			subMapperCount--
+		}
+		allParsed <- true
+	}()
+	<-allParsed
+
+	close(localKeyMapChannel)
+	close(submapperFinished)
+
+	for key, value := range stringToPositionMapping {
+		keyToReducerMap[key] <- mappedTotals[value]
 	}
 
 	input.Close()
 	done <- true
+}
+
+func subMapper(input string, keyMap map[string]int, newMappedValueChannel chan int, submapperFinished chan bool) {
+	// parsedWords := strings.TrimSpace(input)
+	// parsedWords = r.ReplaceAllString(parsedWords, "")
+	parsedWordsArray := strings.Split(input, " ")
+
+	for _, word := range parsedWordsArray {
+		// word = strings.TrimSpace(word)
+		if word == "" {
+			continue
+		}
+
+		if _, exists := keyMap[word]; exists {
+			newMappedValueChannel <- keyMap[word]
+		}
+	}
+
+	submapperFinished <- true
 }
 
 func reducer(listeningWord string, mappedStringCount chan int, outputChannel chan map[string]int) {
@@ -128,7 +184,7 @@ func main() {
 
 		// a non-empty word requires a new reducer to listen for output on.
 		// spawn a goroutine for that reducer listener, add it to the map, and continue
-		wordChannel := make(chan int, 100000)
+		wordChannel := make(chan int, 10000)
 		keyMap[line] = wordChannel
 		go reducer(line, wordChannel, finalOutputChannel)
 
@@ -145,8 +201,8 @@ func main() {
 	// from them their final word counts
 	for _, channel := range keyMap {
 		close(channel)
-		// fmt.Println(<-finalOutputChannel)
-		<-finalOutputChannel
+		fmt.Println(<-finalOutputChannel)
+		// <-finalOutputChannel
 	}
 
 	timeEnd := time.Since(timeStart)

@@ -6,6 +6,7 @@ import (
 	"mapreduce"
 	"os"
 	"regexp"
+	"runtime"
 	"time"
 )
 
@@ -59,8 +60,10 @@ func reducer(input chan interface{}, output chan interface{}) {
 }
 
 func main() {
+	runtime.GOMAXPROCS(8)
 	timeStart := time.Now()
-	fmt.Println(mapreduce.MapReduce(wordcount, reducer, find_files("input"), 20))
+	// fmt.Println(mapreduce.MapReduce(wordcount, reducer, find_files("input"), 20))
+	mapreduce.MapReduce(wordcount, reducer, find_files("input"), 20)
 	timeEnd := time.Since(timeStart)
 	fmt.Printf("Execution took %s\n", timeEnd)
 }
