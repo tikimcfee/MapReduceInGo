@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"regexp"
 	"strings"
 	"time"
@@ -50,11 +51,12 @@ func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool)
 	r, _ := regexp.Compile("[!-@]*")
 	for {
 		line, err := reader.ReadString('\n')
-		parsedWords := strings.Split(line, " ")
+		parsedWords := strings.TrimSpace(line)
+		parsedWords = r.ReplaceAllString(parsedWords, "")
+		parsedWordsArray := strings.Split(parsedWords, " ")
 
-		for _, word := range parsedWords {
-			word = r.ReplaceAllString(word, "")
-			word = strings.TrimSpace(word)
+		for _, word := range parsedWordsArray {
+			// word = strings.TrimSpace(word)
 			if word == "" {
 				continue
 			}
@@ -94,6 +96,7 @@ func main() {
 	// includine runtime package and set MAX_PROCs to whatever machine we have at hand to paralleliz all fast and stuff
 	// runtime.setMaxProcs(X)
 
+	runtime.GOMAXPROCS(8)
 	timeStart := time.Now()
 
 	// get the file to find what keys the user wants to parse; the default name is 'key_file'
@@ -140,7 +143,8 @@ func main() {
 	// from them their final word counts
 	for _, channel := range keyMap {
 		close(channel)
-		fmt.Println(<-finalOutputChannel)
+		// fmt.Println(<-finalOutputChannel)
+		<-finalOutputChannel
 	}
 
 	timeEnd := time.Since(timeStart)
