@@ -1,0 +1,104 @@
+----------------------------------
+Starting new_MapReduce.go tests... [input32]
+Execution took 1.9154135s
+Execution took 1.9096583s
+Execution took 1.9025658s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input32]
+Execution took 2.6021178s
+Execution took 2.6373445s
+Execution took 2.6431616s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input64]
+Execution took 3.6957811s
+Execution took 3.6757501s
+Execution took 3.6766385s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input64]
+Execution took 5.1715896s
+Execution took 5.1421124s
+Execution took 5.162894s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input128]
+Execution took 7.2622429s
+Execution took 7.3163141s
+Execution took 7.2732101s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input128]
+Execution took 10.3398348s
+Execution took 10.2444676s
+Execution took 10.2541169s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input256]
+Execution took 14.3002623s
+Execution took 14.316282s
+Execution took 14.3803361s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input256]
+Execution took 20.7700946s
+Execution took 20.5173186s
+Execution took 20.3607562s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input512]
+Execution took 28.4554021s
+Execution took 29.7621837s
+Execution took 28.2751042s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input512]
+Execution took 40.953361s
+Execution took 40.9923163s
+Execution took 41.1215152s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input1024]
+Execution took 55.9300531s
+Execution took 55.9197252s
+Execution took 55.8246072s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input1024]
+Execution took 1m21.6753335s
+Execution took 1m21.6530497s
+Execution took 1m22.1624023s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input2048]
+Execution took 1m51.1535443s
+Execution took 1m51.5009102s
+Execution took 1m50.8915794s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input2048]
+Execution took 2m42.6390931s
+Execution took 2m42.9837708s
+Execution took 2m43.3075849s
+----------------------------------
+Complete!
+----------------------------------
+Starting new_MapReduce.go tests... [input4096]
+Execution took 3m42.5803014s
+Execution took 3m42.9495807s
+Execution took 3m42.8996224s
+----------------------------------
+----------------------------------
+Starting wordcount.go tests...          [input4096]
+Execution took 5m25.6685147s
+Execution took 5m25.8355734s
+Execution took 5m37.000836s
+----------------------------------
+Complete!

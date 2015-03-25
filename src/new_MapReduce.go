@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -10,6 +11,8 @@ import (
 	"strings"
 	"time"
 )
+
+var input_directory = flag.String("input_directory", "input", "directory of all input files for parsing")
 
 func findAndSplitWork(dirname string, keyMap map[string]chan int) {
 	// channel that mappers call out to when they are finished parsing out their text
@@ -95,10 +98,15 @@ func reducer(listeningWord string, mappedStringCount chan int, outputChannel cha
 }
 
 func main() {
-	// includine runtime package and set MAX_PROCs to whatever machine we have at hand to paralleliz all fast and stuff
-	// runtime.setMaxProcs(X)
+	flag.Parse()
 
-	runtime.GOMAXPROCS(8)
+	dir := flag.Arg(0)
+	if dir == "" {
+		fmt.Println("bad input directory; specify an existing folder with at least 1 text file")
+		os.Exit(1)
+	}
+
+	runtime.GOMAXPROCS(1)
 	timeStart := time.Now()
 
 	// get the file to find what keys the user wants to parse; the default name is 'key_file'
@@ -128,7 +136,7 @@ func main() {
 
 		// a non-empty word requires a new reducer to listen for output on.
 		// spawn a goroutine for that reducer listener, add it to the map, and continue
-		wordChannel := make(chan int, 100000)
+		wordChannel := make(chan int, 1000)
 		keyMap[line] = wordChannel
 		go reducer(line, wordChannel, finalOutputChannel)
 
@@ -139,7 +147,7 @@ func main() {
 
 	// fire off the mappers in a go routine ; this will change frequently, as what mappers do, and
 	// what they are given initially, will change. the directory we search for file in is 'input'
-	findAndSplitWork("input", keyMap)
+	findAndSplitWork(dir, keyMap)
 
 	// inform the for := range's of the reducers that all input has been parsed, and that they may shut down. Also, accept
 	// from them their final word counts

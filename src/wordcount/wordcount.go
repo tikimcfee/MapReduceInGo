@@ -2,6 +2,7 @@ package main
 
 import (
 	"fileiter"
+	"flag"
 	"fmt"
 	"mapreduce"
 	"os"
@@ -9,6 +10,8 @@ import (
 	"runtime"
 	"time"
 )
+
+var input_directory = flag.String("input_directory", "input", "directory of all input files for parsing")
 
 func find_files(dirname string) chan interface{} {
 	output := make(chan interface{})
@@ -60,10 +63,18 @@ func reducer(input chan interface{}, output chan interface{}) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(8)
+	flag.Parse()
+
+	dir := flag.Arg(0)
+	if dir == "" {
+		fmt.Println("bad input directory; specify an existing folder with at least 1 text file")
+		os.Exit(1)
+	}
+
+	runtime.GOMAXPROCS(1)
 	timeStart := time.Now()
 	// fmt.Println(mapreduce.MapReduce(wordcount, reducer, find_files("input"), 20))
-	mapreduce.MapReduce(wordcount, reducer, find_files("input"), 20)
+	mapreduce.MapReduce(wordcount, reducer, find_files(dir), 20)
 	timeEnd := time.Since(timeStart)
 	fmt.Printf("Execution took %s\n", timeEnd)
 }
