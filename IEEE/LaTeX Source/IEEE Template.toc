@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {I}Introduction}{2}
+\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-A}}Map Phase}{2}
+\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-B}}Shuffle Phase}{2}
+\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {I-C}}Reduce Phase}{2}
+\contentsline {section}{\numberline {II}GOLANG}{2}
+\contentsline {section}{\numberline {III}Challenge}{3}
+\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-A}}Problem Statement}{3}
+\contentsline {subsection}{\numberline {\unhbox \voidb@x \hbox {III-B}}Why Go?}{3}
+\contentsline {section}{\numberline {IV}Our Solution}{3}
+\contentsline {section}{\numberline {V}Results}{4}
+\contentsline {section}{\numberline {VI}Conclusion}{4}
+\contentsline {section}{Appendix}{4}
+\contentsline {section}{References}{4}

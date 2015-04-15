@@ -1,0 +1,15 @@
+MapReduce ReadMe Input
+
+All input that is fed into the MapReduce process is read from the input folder in the base directory of the program. This folder may contain one or more input files, but they must be .txt files. The expected format of an input file is a single word per line. Use the sample files located in the input folder as an example.
+
+Compile & Run
+
+To run the MapReduce program you must have Go installed on your computer. If you don’t have it installed, you can download it here.
+
+Open the command line and navigate to the directory where the source code is located. Go will compile and run the program using the go run command.
+
+Running it will look something like this:
+
+	$ go run mapreduce.go
+
+where mapreduce.go is the name of the file. The results of the program will be printed inline along with the execution time.
