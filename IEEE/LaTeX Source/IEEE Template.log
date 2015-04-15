@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  15 APR 2015 17:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  15 APR 2015 18:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -263,35 +263,34 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 199.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 199.
- [2
 
-] [3] <image2.jpeg, id=16, 285.065pt x 177.66376pt>
+
+LaTeX Warning: Citation `FAQ' on page 2 undefined on input line 284.
+
+
+LaTeX Warning: Citation `FAQ' on page 2 undefined on input line 286.
+
+[2
+
+]
+
+LaTeX Warning: Citation `ORIGIN' on page 3 undefined on input line 294.
+
+[3] <image2.jpeg, id=16, 285.065pt x 177.66376pt>
 File: image2.jpeg Graphic file (type jpg)
-
-<use image2.jpeg>
+ <use image2.jpeg>
 Package pdftex.def Info: image2.jpeg used on input line 317.
 (pdftex.def)             Requested size: 248.96161pt x 155.16261pt.
- <image1.jpeg, id=17, 225.84375pt x 225.84375pt>
-File: image1.jpeg Graphic file (type jpg)
 
-<use image1.jpeg>
+<image1.jpeg, id=17, 225.84375pt x 225.84375pt>
+File: image1.jpeg Graphic file (type jpg)
+ <use image1.jpeg>
 Package pdftex.def Info: image1.jpeg used on input line 324.
 (pdftex.def)             Requested size: 248.96161pt x 248.9768pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-File: image2.jpeg Graphic file (type jpg)
-<use image2.jpeg>
-Package pdftex.def Info: image2.jpeg used on input line 331.
-(pdftex.def)             Requested size: 248.96161pt x 155.16261pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 File: image1.jpeg Graphic file (type jpg)
+
 <use image1.jpeg>
-Package pdftex.def Info: image1.jpeg used on input line 338.
+Package pdftex.def Info: image1.jpeg used on input line 331.
 (pdftex.def)             Requested size: 248.96161pt x 248.9768pt.
 
 
@@ -299,7 +298,15 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 File: image2.jpeg Graphic file (type jpg)
 <use image2.jpeg>
-Package pdftex.def Info: image2.jpeg used on input line 345.
+Package pdftex.def Info: image2.jpeg used on input line 338.
+(pdftex.def)             Requested size: 248.96161pt x 155.16261pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+File: image2.jpeg Graphic file (type jpg)
+<use image2.jpeg>
+Package pdftex.def Info: image2.jpeg used on input line 347.
 (pdftex.def)             Requested size: 248.96161pt x 155.16261pt.
 
 
@@ -307,43 +314,55 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 File: image1.jpeg Graphic file (type jpg)
 <use image1.jpeg>
-Package pdftex.def Info: image1.jpeg used on input line 352.
+Package pdftex.def Info: image1.jpeg used on input line 354.
 (pdftex.def)             Requested size: 248.96161pt x 248.9768pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[4 <./image2.jpeg> <./image1.jpeg>] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 480--482
+
+LaTeX Warning: Citation `BAN' on page 4 undefined on input line 366.
+
+
+LaTeX Warning: Citation `BAN' on page 4 undefined on input line 366.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 372.
+[4 <./image2.jpeg> <./image1.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 482--484
 []\OT1/ptm/m/n/8 Bravendar, Dan. "MapRe-duce for Go." MapRe-duce for
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 480--482
+Underfull \hbox (badness 10000) in paragraph at lines 482--484
 \OT1/ptm/m/n/8 Go. Novem-ber 24, 2009. Ac-cessed March 25, 2015.
  []
 
-[6
+[5] (./IEEE Template.aux)
+
+LaTeX Warning: There were undefined references.
 
 
-] (./IEEE Template.aux) ) 
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 3265 strings out of 493117
- 54743 string characters out of 6135433
- 113185 words of memory out of 5000000
- 6708 multiletter control sequences out of 15000+600000
- 40786 words of font info for 75 fonts, out of 8000000 for 9000
+ 3274 strings out of 493117
+ 54850 string characters out of 6135433
+ 114173 words of memory out of 5000000
+ 6714 multiletter control sequences out of 15000+600000
+ 41698 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,5n,38p,1563b,245s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/ba
-se/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb>
-</usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/loc
-al/texlive/2014/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive
-/2014/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on "IEEE Template.pdf" (6 pages, 95382 bytes).
+ 37i,7n,38p,1563b,272s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-d
+ist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/
+type1/urw/times/utmri8a.pfb>
+Output written on "IEEE Template.pdf" (5 pages, 95613 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 27 compressed objects within 1 object stream
+ 39 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

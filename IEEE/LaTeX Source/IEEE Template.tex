@@ -183,7 +183,7 @@ Orlando, FL 32816\\}
 
 \begin{abstract}
 %\boldmath
-This project involves improving on the classic implementation of MapReduce by executing the  three phases of map reduce as concurrently as the algorithm allows. The goal is to significantly improve the runtime over a sequential implementation running on a shared memory architecture machine. We chose to implement this solution using the Go programming language because it includes built in concurrent primitives that allows us to quickly and effectively write code that can run concurrently, while offloading tedious concepts like locking variable access to the language's runtime environment. The performance results are benchmarked not only against a sequential implementation, but also compared to running on a machine with different amounts of logical processors. Further, we show an example of the overuse of the same primitives available in Go that show a multiplicative increase in runtime.
+This project involves improving on the classic implementation of MapReduce by executing the three phases of map reduce as concurrently as the algorithm allows. The goal is to significantly improve the runtime over a sequential implementation running on a shared memory architecture machine. We chose to implement this solution using the Go programming language because it includes built in concurrent primitives that allows us to quickly and effectively write code that can run concurrently, while offloading tedious concepts like locking variable access to the language's runtime environment. The performance results are benchmarked not only against a sequential implementation, but also compared to running on a machine with different amounts of logical processors. Further, we show an example of the overuse of the same primitives available in Go that show a multiplicative increase in runtime.
 
 \end{abstract}
 
@@ -291,7 +291,7 @@ Channels, combined with the concurrency enabled by a goroutine, provides an effi
 
 \section{Challenge}
 \subsection{Problem Statement}
-Map reduce is normally done in three sequential phases. The problem is that each phase depends on the data being received from the previous phase. The process is entirely limited in how fast you can finish by how quickly the previous phase computes all its data and passes it on to the next phase. Current implementations attempt to increase overall speed by computing each phase of data concurrently, whether on a shared memory architecture or across a distributed system of computers, then passing it on to the next phase and repeating those steps until the process completes. The goal of our project is not only to compute each one of these phases concurrently, but to maximize how much of the computing can be done in parallel. There is only so much that can be computed in parallel since, by the very nature of map reduce algorithms, you need all the data from the previous phase before you can proceed. 
+Map reduce is normally done in three sequential phases \cite{ORIGIN}. The problem is that each phase depends on the data being received from the previous phase. The process is entirely limited in how fast you can finish by how quickly the previous phase computes all its data and passes it on to the next phase. Current implementations attempt to increase overall speed by computing each phase of data concurrently, whether on a shared memory architecture or across a distributed system of computers, then passing it on to the next phase and repeating those steps until the process completes. The goal of our project is not only to compute each one of these phases concurrently, but to maximize how much of the computing can be done in parallel. There is only so much that can be computed in parallel since, by the very nature of map reduce algorithms, you need all the data from the previous phase before you can proceed. 
 
 \subsection {Why Go?}
 Initially the thought of using Go came after researching how previous versions of map-reduce had been implemented. The most notorious version was the one implemented by Google of course. A bit more research led to finding and verifying that google's own programming language is a great fit for map reduce. Go provides built in primitives that allow the language to handle and optimize complex concurrent concepts. This allows us to easily get around common bottlenecks that are introduced when writing multithreaded programs by thinking in a multithreaded fashion without having to explicitly deal with the threads, monitors or locks.
@@ -300,7 +300,7 @@ We gain a huge advantage in debugging and programming time by allowing the langu
 
 \section{Our Solution}
 
-Our implementation on MapReduce focuses on when the user only cares about some subset of the data being searched. The user inputs a list of the key terms in addition to the data to be searched, and we return the values of just those key. While our implementation provides less information that standard MapReduce, it gives us a key advantage. In standard MapReduce, the program doesn't know how many reducers to create until it's finished the shuffle phase, but in our MapReduce, we know we want one reducer per keyword (or maybe some multiple). This knowledge allows us to create map, shuffle, and reduce phases that can run concurrently with each other. We first create our reducers and the channels they receive off of, then create mappers which have access to these channels and can thus communicate with the reducers directly. The shuffle phase then becomes an implicit part of the map phase, while the reduce phase is simply receiving a stream of data from mappers as they finish. This extra concurrency, we propose, will speed up runtime, even when the worst case runtime of our phases is the same as the standard implementation. 
+Our implementation on MapReduce focuses on when the user only cares about some subset of the data being searched. The user inputs a list of the key terms in addition to the data to be searched, and we return the values of just those key. While our implementation provides less information than standard MapReduce, it gives us a key advantage. In standard MapReduce, the program doesn't know how many reducers to create until it's finished the shuffle phase, but in our MapReduce, we know we want one reducer per keyword (or maybe some multiple). This knowledge allows us to create map, shuffle, and reduce phases that can run concurrently with each other. We first create our reducers and the channels they receive off of, then create mappers which have access to these channels and can thus communicate with the reducers directly. The shuffle phase then becomes an implicit part of the map phase, while the reduce phase is simply receiving a stream of data from mappers as they finish. This extra concurrency, we propose, will speed up runtime, even when the worst case runtime of our phases is the same as the standard implementation. 
 
 We start by taking in the files our user wants to search and the keywords they care about. We create the reducers and channels for those keywords, and set them to run in goroutines. We then create a mapper for each input file, each with the ability to send data across each of the reducer channels. They then iterate through their assigned input, hashing each word and incrementing the index of the result. This means the mapping phase has a runtime of O(n), where n is the number of words in the input file.
 
@@ -315,16 +315,32 @@ See ExecutionComparison.
 \begin{figure}[h]
 \centering
 	\includegraphics[width = 8.75cm]{image2}
-	\caption{A Lovley Image}
+	\caption{Average execution time for 5 executions}
 		
 \end{figure}
 
 \begin{figure}[h]
 \centering
 	\includegraphics[width = 8.75cm]{image1}
-	\caption{A Lovley Image}
+	\caption{Graphical Execution time vs Input Count}
 		
 \end{figure}
+
+\begin{figure}[h]
+\centering
+	\includegraphics[width = 8.75cm]{image1}
+	\caption{Runtime Deltas vs. Input Count}
+		
+\end{figure}
+
+\begin{figure}[h]
+\centering
+	\includegraphics[width = 8.75cm]{image2}
+	\caption{Runtime Deltas vs. Processor Count}
+		
+\end{figure}
+
+
 
 \begin{figure}[h]
 \centering
@@ -340,64 +356,52 @@ See ExecutionComparison.
 		
 \end{figure}
 
-\begin{figure}[h]
+
+
+\begin{table}[!t]
+% increase table row spacing, adjust to taste
+\renewcommand{\arraystretch}{1.3}
+%if using array.sty, it might be a good idea to tweak the value of
+%\extrarowheight as needed to properly center the text within the cells
+\caption{Overall Execution Comparison \cite{BAN}}
+\label{ExecutionComparison}
 \centering
-	\includegraphics[width = 8.75cm]{image2}
-	\caption{A Lovley Image}
-		
-\end{figure}
+% Some packages, such as MDW tools, offer better commands for making tables
+% than the plain LaTeX2e tabular which is used here.
 
-\begin{figure}[h]
-\centering
-	\includegraphics[width = 8.75cm]{image1}
-	\caption{A Lovley Image}
-		
-\end{figure}
-
-
-
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{Overall Execution Comparison [v1]}
-%\label{ExecutionComparison}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-
-%\begin{tabular}{|c||c||c||c|}
-%\hline
-%File Count & Parallel & Sequential & 1.x Delta\\
-%\hline
-%32 Files & 1.909212533 & 2.6275413 & 1.37624348\\
-%\hline
-%64 Files & 3.682723233 & 5.158865333 & 1.400828954\\
-%\hline
-%128 Files & 7.283922367 & 10.2794731 & 1.41125517\\
-%\hline
-%256 Files & 14.33229347 & 20.5493898 & 1.433782377\\
-%\hline
-%512 Files & 28.83089667 & 41.0223975 & 1.422862354\\
-%\hline
-%1024 Files & 55.89146183 & 81.83026183 & 1.464092352\\
-%\hline
-%2048 Files & 111.1820113 & 162.9768163 & 1.465855981\\
-%\hline
-%4096 Files & 222.8098348 & 329.5016414 & 1.478846935\\
-%\hline
-%\end{tabular}
-%\end{table}
+\begin{tabular}{|c||c||c||c|}
+\hline
+File Count & Parallel & Sequential & 1.x Delta\\
+\hline
+32 Files & 1.909212533 & 2.6275413 & 1.37624348\\
+\hline
+64 Files & 3.682723233 & 5.158865333 & 1.400828954\\
+\hline
+128 Files & 7.283922367 & 10.2794731 & 1.41125517\\
+\hline
+256 Files & 14.33229347 & 20.5493898 & 1.433782377\\
+\hline
+512 Files & 28.83089667 & 41.0223975 & 1.422862354\\
+\hline
+1024 Files & 55.89146183 & 81.83026183 & 1.464092352\\
+\hline
+2048 Files & 111.1820113 & 162.9768163 & 1.465855981\\
+\hline
+4096 Files & 222.8098348 & 329.5016414 & 1.478846935\\
+\hline
+\end{tabular}
+\end{table}
 
 \FloatBarrier
 
 \section{Conclusion}
-[To be written for final report.]
+We have found the following in our less-naive implementation of MapReduce across many goroutines: Per Fig. 1, we can see that as the number of processors increased, the average runtime of decreased somewhat linearly. From this, we also see that as the number of true processor cores doubled, the execution time almost halved.  Per Fig. 2, we see this expressed more readily; core counts 1, 2, 4, and 8 all experience an approximate doubling of runtime as the input sizes increase (100-percent, 203-percent, etc.) However, of note is the decreased true percentage changes as the processor count increased. Note that processor count 1 end at approximately 800-percent of initial runtime, while processor count 8 ends at approximately 775-percent. This is a fairly impressive difference, but to put this in another context of input-size deltas, Fig. 3 shows that, as input sizes increase (double), the percent difference between the input sizes is nearly identical. Following this pattern, running our implementation on increasingly doubled input sizes would see a slowly increasing delta between the single core and multi-core runtimes, implying that, to some extent, a level of scalability has been achieved.
+Fig'.s 4 and 5 show graphical representations of the differences in execution by input and cores. It seems vaguely exponentially decreasing from this perspective (albeit with a very high constant), and should the number of cores continue to increase, so to would the runtime decrease. Of note, the above table expressing the differences in parallel and sequential execution time shows that there is a very definite decrease in runtime when using our parallel implementation.
+A figure note shown is an execution attempt made by the group to create a recursive and sub-mapped solution to our MapReduce problem. In it, we changed our single Mapper() function to spawn multiple sub-mappers that ran per-line, as opposed to a single Mapper() goroutine executing for every individual file. It seems that, at least with our implementation, that memory usage shot up more than exponentially; a 1 GB input text file used more than 8 GB of memory to execute correctly(!). Through brief analysis, the cause of this was found to be a sublety of golang that was not carefully accounted for. As mentioned, a key expectation of the golang is that data is to be sent via channels as opposed to methods; that being the case, this implementation actually copied every single string it processed until the machine ran out of memory. The go-approved method for this would have been even more channels to send parsing strings on that channel.
 
 \section{Future Work}
 
-There are a few potential optimizations and utilities we found that might improve upon our algorithm. One potential optimization would be to generate multiple reducers per word, instead of only one. This would allow for effectively larger channel buffers, as when a channel fills its buffer it blocks until room is created. It could also be expanded into dynamically resizing reducers, where more reducers are created for a word when its buffer fills. The potential pitfalls of this would involve each word needing a reducer hub or controller, to manage the reducers for a word, distribute incoming tokens, and merge the results when all reducers are done. This could cause bottlenecking; as every request would go through the hub to be distributed across the multiple reducers for a word. Additionally, it would add another level of blocking to the end of the algorithm; each reducer hub would need to block sending its results until every one of its reducers returned a value. A potential utility to expand on our algorithm would be the creation of a generic framework that could take in a map and reduce function from the user and use our algorithm in conjunction with these functions to derive an answer to whatever question. This might slow down the algorithm, as doing so would require changing our mapping logic to operate on the output of the supplied mapping logic, instead of processing the data as its iterated through.
+There are a few potential optimizations and utilities we found that might improve upon our algorithm. One potential optimization would be to generate multiple reducers per word, instead of only one. This would allow for effectively larger channel buffers, as when a channel fills its buffer it blocks until room is created. It could also be expanded into dynamically resizing reducers, where more reducers are created for a word when its buffer fills. The potential pitfalls of this would involve each word needing a reducer hub or controller, to manage the reducers for a word, distribute incoming tokens, and merge the results when all reducers are done. This could cause bottlenecking; as every request would go through the hub to be distributed across the multiple reducers for a word. Additionally, it would add another level of blocking to the end of the algorithm; each reducer hub would need to block sending its results until every one of its reducers returned a value. A potential utility to expand on our algorithm would be the creation of a generic framework that could take in a map and reduce function from the user and use our algorithm in conjunction with these functions to derive an answer to whatever question. This might slow down the algorithm, as doing so would require changing our mapping logic to operate on the output of the supplied mapping logic, instead of processing the data as its iterated through. As mentioned in the conclusion, one of the largest improvements would be to find a way to implement a finer-grained approach to Map() and Submap(), allowing even more goroutines to execute and totally utilize the increasing number of cores on a machine.
 
 
 % if have a single appendix:
