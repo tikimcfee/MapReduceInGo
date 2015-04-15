@@ -52,6 +52,8 @@ func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool)
 	stringToPositionMapping := make(map[string]int)
 	mappedTotals := make([]int, len(keyToReducerMap))
 
+	lines := make([]string, 0)
+
 	i := 0
 	for key, _ := range keyToReducerMap {
 		stringToPositionMapping[key] = i
@@ -64,11 +66,15 @@ func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool)
 	submapperFinished := make(chan bool)
 	allParsed := make(chan bool)
 	subMapperCount := 0
+	i = 0
 	go func() {
 		for {
 			line, err := reader.ReadString('\n')
 			parsedWords := strings.TrimSpace(line)
 			parsedWords = r.ReplaceAllString(parsedWords, "")
+
+			lines = append(lines, parsedWords)
+			i++
 			// parsedWordsArray := strings.Split(parsedWords, " ")
 
 			// for _, word := range parsedWordsArray {
@@ -83,11 +89,11 @@ func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool)
 			// }
 
 			if err == io.EOF {
-				go subMapper(parsedWords, stringToPositionMapping, localKeyMapChannel, submapperFinished)
+				go subMapper(&lines, stringToPositionMapping, localKeyMapChannel, submapperFinished, i-1)
 				subMapperCount++
 				break
 			} else {
-				go subMapper(parsedWords, stringToPositionMapping, localKeyMapChannel, submapperFinished)
+				go subMapper(&lines, stringToPositionMapping, localKeyMapChannel, submapperFinished, i-1)
 				subMapperCount++
 			}
 		}
@@ -122,10 +128,11 @@ func mapper(input *os.File, keyToReducerMap map[string]chan int, done chan bool)
 	done <- true
 }
 
-func subMapper(input string, keyMap map[string]int, newMappedValueChannel chan int, submapperFinished chan bool) {
+func subMapper(input *[]string, keyMap map[string]int, newMappedValueChannel chan int, submapperFinished chan bool, parseAt int) {
 	// parsedWords := strings.TrimSpace(input)
 	// parsedWords = r.ReplaceAllString(parsedWords, "")
-	parsedWordsArray := strings.Split(input, " ")
+	parsedWordsArray := strings.Split((*input)[parseAt], " ")
+	// fmt.Println(parsedWordsArray)
 
 	for _, word := range parsedWordsArray {
 		// word = strings.TrimSpace(word)
