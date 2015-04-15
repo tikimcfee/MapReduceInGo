@@ -314,56 +314,45 @@ See ExecutionComparison.
 
 \begin{figure}[h]
 \centering
-	\includegraphics[width = 8.75cm]{image2}
-	\caption{Average execution time for 5 executions}
+	\includegraphics[width = 8.75cm]{[image]DeltasperInputSize}
+	\caption{Percent deltas vs Core Count}
 		
 \end{figure}
 
 \begin{figure}[h]
 \centering
-	\includegraphics[width = 8.75cm]{image1}
-	\caption{Graphical Execution time vs Input Count}
+	\includegraphics[width = 8.75cm]{[image]DeltasperProcCount}
+	\caption{Percent deltas vs Input Size}
 		
 \end{figure}
 
 \begin{figure}[h]
 \centering
-	\includegraphics[width = 8.75cm]{image1}
-	\caption{Runtime Deltas vs. Input Count}
+	\includegraphics[width = 8.75cm]{[image]InputSizevsRuntime}
+	\caption{Runtime delta vs Input Size}
 		
 \end{figure}
 
 \begin{figure}[h]
 \centering
-	\includegraphics[width = 8.75cm]{image2}
-	\caption{Runtime Deltas vs. Processor Count}
-		
-\end{figure}
-
-
-
-\begin{figure}[h]
-\centering
-	\includegraphics[width = 8.75cm]{image2}
-	\caption{A Lovley Image}
+	\includegraphics[width = 8.75cm]{[image]NumProcsvsRuntime}
+	\caption{Runtime decrease vs. Processor Count}
 		
 \end{figure}
 
 \begin{figure}[h]
 \centering
-	\includegraphics[width = 8.75cm]{image1}
-	\caption{A Lovley Image}
+	\includegraphics[width = 8.75cm]{[image]TimeTakenbyProcsandInputSize}
+	\caption{Runtime increase vs. Input size}
 		
 \end{figure}
 
 
-
-\begin{table}[!t]
+\begin{table}[h!]
 % increase table row spacing, adjust to taste
 \renewcommand{\arraystretch}{1.3}
 %if using array.sty, it might be a good idea to tweak the value of
 %\extrarowheight as needed to properly center the text within the cells
-\caption{Overall Execution Comparison \cite{BAN}}
 \label{ExecutionComparison}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
@@ -390,6 +379,7 @@ File Count & Parallel & Sequential & 1.x Delta\\
 4096 Files & 222.8098348 & 329.5016414 & 1.478846935\\
 \hline
 \end{tabular}
+\caption{Overall Execution Comparison \cite{BAN}}
 \end{table}
 
 \FloatBarrier
@@ -397,7 +387,7 @@ File Count & Parallel & Sequential & 1.x Delta\\
 \section{Conclusion}
 We have found the following in our less-naive implementation of MapReduce across many goroutines: Per Fig. 1, we can see that as the number of processors increased, the average runtime of decreased somewhat linearly. From this, we also see that as the number of true processor cores doubled, the execution time almost halved.  Per Fig. 2, we see this expressed more readily; core counts 1, 2, 4, and 8 all experience an approximate doubling of runtime as the input sizes increase (100-percent, 203-percent, etc.) However, of note is the decreased true percentage changes as the processor count increased. Note that processor count 1 end at approximately 800-percent of initial runtime, while processor count 8 ends at approximately 775-percent. This is a fairly impressive difference, but to put this in another context of input-size deltas, Fig. 3 shows that, as input sizes increase (double), the percent difference between the input sizes is nearly identical. Following this pattern, running our implementation on increasingly doubled input sizes would see a slowly increasing delta between the single core and multi-core runtimes, implying that, to some extent, a level of scalability has been achieved.
 Fig'.s 4 and 5 show graphical representations of the differences in execution by input and cores. It seems vaguely exponentially decreasing from this perspective (albeit with a very high constant), and should the number of cores continue to increase, so to would the runtime decrease. Of note, the above table expressing the differences in parallel and sequential execution time shows that there is a very definite decrease in runtime when using our parallel implementation.
-A figure note shown is an execution attempt made by the group to create a recursive and sub-mapped solution to our MapReduce problem. In it, we changed our single Mapper() function to spawn multiple sub-mappers that ran per-line, as opposed to a single Mapper() goroutine executing for every individual file. It seems that, at least with our implementation, that memory usage shot up more than exponentially; a 1 GB input text file used more than 8 GB of memory to execute correctly(!). Through brief analysis, the cause of this was found to be a sublety of golang that was not carefully accounted for. As mentioned, a key expectation of the golang is that data is to be sent via channels as opposed to methods; that being the case, this implementation actually copied every single string it processed until the machine ran out of memory. The go-approved method for this would have been even more channels to send parsing strings on that channel.
+A figure not shown is an execution attempt made by the group to create a recursive and sub-mapped solution to our MapReduce problem. In it, we changed our single Mapper() function to spawn multiple sub-mappers that ran per-line, as opposed to a single Mapper() goroutine executing for every individual file. It seems that, at least with our implementation, that memory usage shot up more than exponentially; a 1 GB input text file used more than 8 GB of memory to execute correctly(!). Through brief analysis, the cause of this was found to be a sublety of golang that was not carefully accounted for. As mentioned, a key expectation of the golang is that data is to be sent via channels as opposed to methods; that being the case, this implementation actually copied every single string it processed until the machine ran out of memory. The go-approved method for this would have been even more channels to send parsing strings on that channel.
 
 \section{Future Work}
 
