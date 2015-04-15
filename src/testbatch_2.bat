@@ -1,10 +1,21 @@
 @echo off
 echo ----------------------------------
-echo Starting new_MapReduce.go tests... [input1024]
-for %%i in (1, 2, 3) do start /b /wait go run new_MapReduce.go [input1024]
-echo ----------------------------------
-echo ----------------------------------
-echo Starting wordcount.go tests...		[input1024]
-for %%i in (1, 2, 3) do start /b /wait go run .\wordcount\wordcount.go [input1024]
+echo NUM_PROCS	INPUT_COUNT	RUNTIME
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=32 -processor_count=1
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=32 -processor_count=2
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=32 -processor_count=4
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=32 -processor_count=8
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=64 -processor_count=1
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=64 -processor_count=2
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=64 -processor_count=4
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=64 -processor_count=8
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=128 -processor_count=1
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=128 -processor_count=2
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=128 -processor_count=4
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=128 -processor_count=8
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=256 -processor_count=1
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=256 -processor_count=2
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=256 -processor_count=4
+start /b /wait go run MapReduce_prettyPrint.go -input_directory=256 -processor_count=8
 echo ----------------------------------
 echo Complete!
